@@ -1,0 +1,41 @@
+version: '3'
+services:
+  webapi:
+    container_name: webapi
+    build:
+      context: ./
+      dockerfile: api.dockerfile
+    command: gunicorn inventory.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./:/webapi
+      - static_volume:/webapi/static
+      - media_volume:/webapi/media
+    working_dir: /webapi
+    expose:
+      - 8000
+    env_file: .env
+    depends_on:
+      - db
+  db:
+    image: postgres:11.5-alpine
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file: .env.db
+  nginx:
+    image: nginx:1.16
+    container_name: nginx
+    working_dir: /app
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - static_volume:/webapi/static
+      # - media_volume:/app/media
+    ports:
+      - 80:80
+    depends_on:
+      - webapi
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
