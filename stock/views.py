@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, AllowAny, IsAuthenticatedOrReadOnly
 
-from .models import Product, Movement
+from .models import Product, Movement, Partner, Location
 from .serializers import ProductSerializer, MovementSerializer
 # Create your views here.
 
@@ -30,3 +30,15 @@ class MovementViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Movement.objects.all()
     serializer_class = MovementSerializer
+
+
+class PartnerViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    queryset = Partner.objects.all()
+    serializer_class = PartnerSerializer
+
+
+class LocationViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer

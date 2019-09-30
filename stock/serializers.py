@@ -1,5 +1,5 @@
 from rest_framework import routers, serializers, viewsets
-from .models import Product, Movement
+from .models import Product, Movement, Partner, Location
 
 # Serializers define the API representation.
 
@@ -24,3 +24,16 @@ class MovementSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Movement
         fields = ('kind', 'partner', 'location', 'data', 'product', 'quantity')
+
+
+class PartnerSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Partner
+        fields = ('name', 'cp', 'client', 'supllier')
+
+class LocationSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Location
+        fields = ('name', 'kind')

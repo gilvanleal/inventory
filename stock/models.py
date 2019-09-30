@@ -43,8 +43,8 @@ class Movement(models.Model):
 class Partner(models.Model):
     name = models.CharField(max_length=50)
     cp = models.CharField(max_length=14, unique=True) # CNPJ or CPF
-    client = models.BooleanField()
-    supplier = models.BooleanField()
+    client = models.BooleanField(help_text='Is a Client')
+    supplier = models.BooleanField(help_text='Is a Supplier')
 
 
 class Location(models.Model):
