@@ -6,7 +6,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, AllowAny, IsAuthenticatedOrReadOnly
 
 from .models import Product, Movement, Partner, Location
-from .serializers import ProductSerializer, MovementSerializer
+from .serializers import ProductSerializer, MovementSerializer, PartnerSerializer, LocationSerializer
 # Create your views here.
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -16,7 +16,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def movement(self, request, pk=None):
-        import ipdb; ipdb.set_trace();
         movs = Movement.objects.filter(product=pk).order_by('-data')
         page = self.paginate_queryset(movs)
         if page is not None:
