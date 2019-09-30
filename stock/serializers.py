@@ -16,7 +16,6 @@ class MovementSerializer(serializers.HyperlinkedModelSerializer):
     quantity = serializers.IntegerField(min_value=1)
 
     def validate(self, data):
-        # import ipdb; ipdb.set_trace()
         if data['kind'] == Movement.OUT and data['quantity'] > data['product'].quantity:
             raise serializers.ValidationError('Stock out')
         return data
@@ -30,7 +29,8 @@ class PartnerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Partner
-        fields = ('name', 'cp', 'client', 'supllier')
+        fields = ('name', 'cp', 'client', 'supplier')
+
 
 class LocationSerializer(serializers.HyperlinkedModelSerializer):
 
