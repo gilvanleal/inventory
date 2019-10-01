@@ -5,10 +5,12 @@ from django.core.exceptions import ValidationError
 
 # Create your models here.
 
+
 class Product(models.Model):
     name = models.CharField(max_length=50, unique=True)
     sku = models.CharField(max_length=15, unique=True, help_text='Stock Keeping Unit')
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    # TODO add Category for product
 
     def __str__(self):
         return self.name
@@ -22,17 +24,19 @@ class Product(models.Model):
 
 class Movement(models.Model):
     IN, OUT = 'IN', 'OUT'
-    KIND = [(IN, 'Entrada'),(OUT, 'Saída')]
+    KIND = [(IN, 'Inlet'), (OUT, 'Outlet')]
 
     kind = models.CharField(max_length=5, choices=KIND, default=OUT)
     data = models.DateField(default=date.today)
-    quantity = models.PositiveIntegerField() # TODO Dinâmico de acordo com a unidade mensuração (Inteiro ou Decimal)
+    quantity = models.PositiveIntegerField()  # TODO dynamic accordingly with a unit measurement (Integer ou Decimal)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     partner = models.ForeignKey('Partner', null=True,  on_delete=models.SET_NULL)
     location = models.ForeignKey('Location', null=True, on_delete=models.SET_NULL)
+    # TODO add control product for Lot
+    # TODO add logistic LIFO e FIFO for product
 
     def __str__(self):
-        return ''
+        return f'{self.product} - {self.data}'
     
     def save(self, *args, **kwargs):
         if self.kind == Movement.OUT and self.quantity > self.product.quantity:
@@ -42,14 +46,16 @@ class Movement(models.Model):
 
 class Partner(models.Model):
     name = models.CharField(max_length=50)
-    cp = models.CharField(max_length=14, unique=True) # CNPJ or CPF
+    cp = models.CharField(max_length=14, unique=True, help_text='CNPJ or CPF')
     client = models.BooleanField(help_text='Is a Client')
     supplier = models.BooleanField(help_text='Is a Supplier')
+    # TODO add Partner default location
+    # TODO add address
 
 
 class Location(models.Model):
     CLIENT, INTERNAL = 'CLIENT', 'INTERNAL'
-    KIND = [(CLIENT, 'Cliente'), (INTERNAL, 'INTERNAL')]
+    KIND = [(CLIENT, 'Client'), (INTERNAL, 'Internal')]
 
     name = models.CharField(max_length=50)
     kind = models.CharField(max_length=10, choices=KIND)

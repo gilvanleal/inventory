@@ -16,8 +16,14 @@ class MovementSerializer(serializers.HyperlinkedModelSerializer):
     quantity = serializers.IntegerField(min_value=1)
 
     def validate(self, data):
-        if data['kind'] == Movement.OUT and data['quantity'] > data['product'].quantity:
-            raise serializers.ValidationError('Stock out')
+        if data['kind'] == Movement.OUT:
+            if data['quantity'] > data['product'].quantity:
+                raise serializers.ValidationError('Stock out')
+            if data.get('partner', False) and not data['partner'].client:
+                raise serializers.ValidationError('This partner is not a client')
+        if data['kind'] == Movement.IN:
+            if data.get('partner', False) and not data['partner'].supplier:
+                raise serializers.ValidationError('This partner is not a supplier')
         return data
 
     class Meta:
