@@ -6,4 +6,4 @@
 >  | ---------- | ----------- | -----|
 >  |**GET**|_/products/_||
 >  |**GET**|_/products/[id]_||
->  |**GET**|_/products/[id]/movement_| gets movement for product|
+>  |**GET**|_/products/[id]/movement_| get movement for product|
